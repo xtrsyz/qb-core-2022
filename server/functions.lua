@@ -113,7 +113,7 @@ end
 -- Will set the provided player id / source into the provided bucket id
 function QBCore.Functions.SetPlayerBucket(source --[[ int ]], bucket --[[ int ]])
     if source and bucket then
-        local plicense = QBCore.Functions.GetIdentifier(source, 'license')
+        local plicense = QBCore.Functions.GetIdentifier(source, QBConfig.PrimaryIdentifier)
         SetPlayerRoutingBucket(source, bucket)
         QBCore.Player_Buckets[plicense] = {id = source, bucket = bucket}
         return true
@@ -265,14 +265,14 @@ end
 
 function QBCore.Functions.AddPermission(source, permission)
     local src = source
-    local license = QBCore.Functions.GetIdentifier(src, 'license')
+    local license = QBCore.Functions.GetIdentifier(src, QBConfig.PrimaryIdentifier)
     ExecuteCommand(('add_principal identifier.%s qbcore.%s'):format(license, permission))
     QBCore.Commands.Refresh(src)
 end
 
 function QBCore.Functions.RemovePermission(source, permission)
     local src = source
-    local license = QBCore.Functions.GetIdentifier(src, 'license')
+    local license = QBCore.Functions.GetIdentifier(src, QBConfig.PrimaryIdentifier)
     if permission then
         if IsPlayerAceAllowed(src, permission) then
             ExecuteCommand(('remove_principal identifier.%s qbcore.%s'):format(license, permission))
@@ -310,14 +310,14 @@ end
 -- Opt in or out of admin reports
 
 function QBCore.Functions.IsOptin(source)
-    local license = QBCore.Functions.GetIdentifier(source, 'license')
+    local license = QBCore.Functions.GetIdentifier(source, QBConfig.PrimaryIdentifier)
     if not license or not QBCore.Functions.HasPermission(source, 'admin') then return false end
     local Player = QBCore.Functions.GetPlayer(source)
     return Player.PlayerData.optin
 end
 
 function QBCore.Functions.ToggleOptin(source)
-    local license = QBCore.Functions.GetIdentifier(source, 'license')
+    local license = QBCore.Functions.GetIdentifier(source, QBConfig.PrimaryIdentifier)
     if not license or not QBCore.Functions.HasPermission(source, 'admin') then return end
     local Player = QBCore.Functions.GetPlayer(source)
     Player.PlayerData.optin = not Player.PlayerData.optin
@@ -327,7 +327,7 @@ end
 -- Check if player is banned
 
 function QBCore.Functions.IsPlayerBanned(source)
-    local plicense = QBCore.Functions.GetIdentifier(source, 'license')
+    local plicense = QBCore.Functions.GetIdentifier(source, QBConfig.PrimaryIdentifier)
     local result = MySQL.Sync.fetchSingle('SELECT * FROM bans WHERE license = ?', { plicense })
     if not result then return false end
     if os.time() < result.expire then

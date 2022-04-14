@@ -8,7 +8,7 @@ QBCore.Player = {}
 function QBCore.Player.Login(source, citizenid, newData)
     if source and source ~= '' then
         if citizenid then
-            local license = QBCore.Functions.GetIdentifier(source, 'license')
+            local license = QBCore.Functions.GetIdentifier(source, QBConfig.PrimaryIdentifier)
             local PlayerData = MySQL.Sync.prepare('SELECT * FROM players where citizenid = ?', { citizenid })
             if PlayerData and license == PlayerData.license then
                 PlayerData.money = json.decode(PlayerData.money)
@@ -40,7 +40,7 @@ function QBCore.Player.CheckPlayerData(source, PlayerData)
     PlayerData = PlayerData or {}
     PlayerData.source = source
     PlayerData.citizenid = PlayerData.citizenid or QBCore.Player.CreateCitizenId()
-    PlayerData.license = PlayerData.license or QBCore.Functions.GetIdentifier(source, 'license')
+    PlayerData.license = PlayerData.license or QBCore.Functions.GetIdentifier(source, QBConfig.PrimaryIdentifier)
     PlayerData.name = GetPlayerName(source)
     PlayerData.cid = PlayerData.cid or 1
     PlayerData.money = PlayerData.money or {}
@@ -482,7 +482,7 @@ local playertables = { -- Add tables as needed
 }
 
 function QBCore.Player.DeleteCharacter(source, citizenid)
-    local license = QBCore.Functions.GetIdentifier(source, 'license')
+    local license = QBCore.Functions.GetIdentifier(source, QBConfig.PrimaryIdentifier)
     local result = MySQL.Sync.fetchScalar('SELECT license FROM players where citizenid = ?', { citizenid })
     if license == result then
         local query = "DELETE FROM %s WHERE citizenid = ?"
