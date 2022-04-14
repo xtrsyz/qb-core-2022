@@ -8,6 +8,7 @@ local Translations = {
         company_too_poor = 'Your employer is broke',
         item_not_exist = 'Item does not exist',
         too_heavy = 'Inventory too full',
+        item_limit = 'Item overlimit',
         duplicate_license = 'Duplicate Rockstar License Found',
         no_valid_license  = 'No Valid Rockstar License Found',
         not_whitelisted = 'You\'re not whitelisted for this server'
