@@ -516,7 +516,7 @@ function QBCore.Player.LoadInventory(PlayerData)
         if next(inventory) then
             for _, item in pairs(inventory) do
                 if item then
-                    local itemInfo = QBCore.Shared.Items[item.name:lower()]
+                    local itemInfo = QBCore.Shared.Items[item.name]
                     if itemInfo then
                         PlayerData.items[item.slot] = {
                             name = itemInfo['name'],
@@ -534,7 +534,7 @@ function QBCore.Player.LoadInventory(PlayerData)
                             combinable = itemInfo['combinable']
                         }
                     else
-                        missingItems[#missingItems+1] = item.name:lower()
+                        missingItems[#missingItems+1] = item.name
                     end
 
                 end
@@ -585,8 +585,9 @@ end
 function QBCore.Player.GetSlotsByItem(items, itemName)
     local slotsFound = {}
     if not items then return slotsFound end
+    local itemName = itemName:lower()
     for slot, item in pairs(items) do
-        if item.name:lower() == itemName:lower() then
+        if item.name == itemName then
             slotsFound[#slotsFound+1] = slot
         end
     end
@@ -595,8 +596,9 @@ end
 
 function QBCore.Player.GetFirstSlotByItem(items, itemName)
     if not items then return nil end
+    local itemName = itemName:lower()
     for slot, item in pairs(items) do
-        if item.name:lower() == itemName:lower() then
+        if item.name == itemName then
             return tonumber(slot)
         end
     end
